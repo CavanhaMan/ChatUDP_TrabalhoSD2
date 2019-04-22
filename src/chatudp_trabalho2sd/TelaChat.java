@@ -65,6 +65,11 @@ public class TelaChat extends javax.swing.JFrame {
 
         btSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconeSair.png"))); // NOI18N
         btSair.setEnabled(false);
+        btSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -91,7 +96,7 @@ public class TelaChat extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(campoEntraNome, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -112,6 +117,11 @@ public class TelaChat extends javax.swing.JFrame {
 
         btLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconeLimpar.png"))); // NOI18N
         btLimpar.setEnabled(false);
+        btLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btLimparActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -160,7 +170,7 @@ public class TelaChat extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -182,17 +192,26 @@ public class TelaChat extends javax.swing.JFrame {
 
     private void btEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarActionPerformed
         nome = campoEntraNome.getText();
-        
         if(!nome.equals("")){
-            mudarCampos();
-            
+            ativarCampos();
+            telaChat.append("\nUsuário " + nome + " entrou.");
             cliente = new Cliente(socket);
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(this, "Digite um nome/apelido para entrar.");
         }   
     }//GEN-LAST:event_btEntrarActionPerformed
 
-    public void mudarCampos() {
+    private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
+        desativarCampos();
+        telaChat.append("\nUsuário " + nome + " saiu.");
+    }//GEN-LAST:event_btSairActionPerformed
+
+    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
+        telaChat.setText("");
+    }//GEN-LAST:event_btLimparActionPerformed
+
+    public void ativarCampos() {
         campoEntraNome.setEditable(false);
         campoEntraNome.setEnabled(false);
         btEntrar.setEnabled(false);
@@ -200,6 +219,17 @@ public class TelaChat extends javax.swing.JFrame {
         telaChat.setEnabled(true);
         campoEntraMsg.setEnabled(true);
         btEnviarMsg.setEnabled(true);
+        btLimpar.setEnabled(true);
+    }
+    
+    public void desativarCampos() {
+        campoEntraNome.setEditable(true);
+        campoEntraNome.setEnabled(true);
+        btEntrar.setEnabled(true);
+        btSair.setEnabled(false);
+        telaChat.setEnabled(false);
+        campoEntraMsg.setEnabled(false);
+        btEnviarMsg.setEnabled(false);
         btLimpar.setEnabled(true);
     }
     
