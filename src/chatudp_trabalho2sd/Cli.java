@@ -7,11 +7,11 @@ import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Cliente extends Thread {
+public class Cli extends Thread {
 
     private final DatagramSocket socket;
 
-    public Cliente(DatagramSocket socket) {
+    public Cli(DatagramSocket socket) {
         this.socket = socket;
     }
 
@@ -29,7 +29,7 @@ public class Cliente extends Thread {
 
             envio = nome + " entrou!";
 
-            Thread t = new Cliente(s);
+            Thread t = new Cli(s);
             t.start();
 
             while (!envio.equalsIgnoreCase("")) {
@@ -51,7 +51,7 @@ public class Cliente extends Thread {
             s.send(msg);
             s.close();
         } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cli.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
