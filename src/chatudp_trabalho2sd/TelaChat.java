@@ -51,7 +51,7 @@ public class TelaChat extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel1.setFont(new java.awt.Font("Sitka Small", 1, 20)); // NOI18N
-        jLabel1.setText("Digite seu nome:");
+        jLabel1.setText("Nome:");
 
         campoEntraNome.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         campoEntraNome.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -79,7 +79,7 @@ public class TelaChat extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(campoEntraNome, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                .addComponent(campoEntraNome, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btEntrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

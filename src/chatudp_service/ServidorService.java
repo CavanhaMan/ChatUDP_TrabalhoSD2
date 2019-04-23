@@ -73,11 +73,11 @@ public class ServidorService {
 
                 }
             } catch (IOException | ClassNotFoundException ex) {
-                Mensagem m = new Mensagem();
-                m.setNomeDoCliente(mensagem.getNomeDoCliente());
-                desconectar(m, saida);
-                System.out.println(mensagem.getNomeDoCliente() + " deixou o chat.");
-            } 
+                    Mensagem m = new Mensagem();
+                    m.setNomeDoCliente(mensagem.getNomeDoCliente());
+                    desconectar(m, saida);
+                    System.out.println(mensagem.getNomeDoCliente() + " deixou o chat.");} 
+        }
     }
 
 
@@ -101,6 +101,4 @@ public class ServidorService {
         } catch (IOException ex) {System.out.println(ex.getMessage() + " Local: ChatUDP_TrabalhoSD2.Service.ServidorService.enviar_para_um()");}
     }
 
-
-}
 }
