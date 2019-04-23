@@ -1,18 +1,79 @@
 package chatudp_trabalho2sd;
 
+import chatudp_service.ClienteService;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramSocket;
+import java.net.Socket;
 import javax.swing.JOptionPane;
 
 public class TelaChat extends javax.swing.JFrame {
     
     private String nome;
     private DatagramSocket socket;
-    private Cliente cliente;
+    private Mensagem mensagem;
+    private ClienteService cliente;
 
     public TelaChat() {
         initComponents();
     }
 
+    private class ListenerSocket implements Runnable {
+        private ObjectOutputStream saida;
+        private ObjectInputStream entrada;
+        public ListenerSocket(Socket s) {
+            try {
+                this.saida = new ObjectOutputStream(s.getOutputStream());
+                this.entrada = new ObjectInputStream(s.getInputStream());
+            } catch (IOException ex) {System.out.println(ex.getMessage());}
+        }
+        @Override
+        public void run() {
+            Mensagem mensagem = null;
+            try {
+                while ((mensagem = (Mensagem) entrada.readObject()) != null) {
+                    Mensagem.Acao acao = mensagem.getAcaoDoCliente();
+                    System.out.println(mensagem.getTextoDaMensagem());
+                    switch (acao) {
+                        case CONECTAR:
+                            conectar(mensagem, saida);
+                            break;
+                        case DESCONECTAR:
+                            desconectar(mensagem, saida);
+                            return;
+                        case ENVIAR:
+                            enviar_para_todos(mensagem,saida);
+                            break;
+                    }
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                    Mensagem m = new Mensagem();
+                    m.setNomeDoCliente(mensagem.getNomeDoCliente());
+                    desconectar(m, saida);
+                    System.out.println(mensagem.getNomeDoCliente() + " deixou o chat.");} 
+        }
+    }
+    private void desconectar(Mensagem msg, ObjectOutputStream s) {
+        msg.setTextoDaMensagem(" saiu do chat.");
+        msg.setAcaoDoCliente(Mensagem.Acao.ENVIAR);
+        enviar_para_todos(msg,s);
+        System.out.println("Usuário " + msg.getNomeDoCliente() + " saiu da sala.");
+        desativarCampos();
+    }
+    private void conectar(Mensagem msg, ObjectOutputStream s) {
+        ativarCampos();
+        try {
+            s.writeObject(msg);
+        } catch (IOException ex) {System.out.println(ex.getMessage() + " Local: ChatUDP_TrabalhoSD2.Service.ServidorService.enviar_para_um()");}
+    }
+    private void enviar_para_todos(Mensagem msg, ObjectOutputStream s) {
+        try {
+            s.writeObject(msg);
+        } catch (IOException ex) {System.out.println(ex.getMessage() + " Local: ChatUDP_TrabalhoSD2.Service.ServidorService.enviar_para_um()");}
+    }
+
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -195,7 +256,18 @@ public class TelaChat extends javax.swing.JFrame {
         if(!nome.equals("")){
             ativarCampos();
             telaChat.append("\nUsuário " + nome + " entrou.");
-            cliente = new Cliente(socket);
+            this.cliente = new ClienteService();
+            this.mensagem = new Mensagem();
+            this.mensagem.setAcaoDoCliente(Mensagem.Acao.CONECTAR);
+            this.mensagem.setNomeDoCliente(nome);
+
+            this.cliente = new ClienteService();
+            this.socket = this.cliente.clienteConectar();
+
+            new Thread(new ListenerSocket(this.socket)).start();
+
+            this.cliente.clienteEnviar(mensagem);
+
         }
         else {
             JOptionPane.showMessageDialog(this, "Digite um nome/apelido para entrar.");

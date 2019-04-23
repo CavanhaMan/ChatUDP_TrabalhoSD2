@@ -1,5 +1,15 @@
 package chatudp_trabalho2sd;
-
+public class Cliente {
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaChat().setVisible(true);
+            }
+        });
+    }
+    
+}
+/*
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -70,4 +80,4 @@ public class Cliente extends Thread {
             System.out.println(ex.getMessage());
         }
     }
-}
+}*/
