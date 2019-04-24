@@ -6,10 +6,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class TelaChat extends javax.swing.JFrame {
     
+    private DatagramSocket listenerSocket = null;
     private String nome;
     private DatagramSocket socket;
     private Mensagem mensagem;
@@ -254,19 +258,23 @@ public class TelaChat extends javax.swing.JFrame {
     private void btEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarActionPerformed
         nome = campoEntraNome.getText();
         if(!nome.equals("")){
-            ativarCampos();
-            telaChat.append("\nUsuário " + nome + " entrou.");
-            this.cliente = new ClienteService();
-            this.mensagem = new Mensagem();
-            this.mensagem.setAcaoDoCliente(Mensagem.Acao.CONECTAR);
-            this.mensagem.setNomeDoCliente(nome);
-
-            this.cliente = new ClienteService();
-            this.socket = this.cliente.clienteConectar();
-
-            new Thread(new ListenerSocket(this.socket)).start();
-
-            this.cliente.clienteEnviar(mensagem);
+            try {
+                ativarCampos();
+                telaChat.append("\nUsuário " + nome + " entrou.");
+                this.cliente = new ClienteService();
+                this.mensagem = new Mensagem();
+                this.mensagem.setAcaoDoCliente(Mensagem.Acao.CONECTAR);
+                this.mensagem.setNomeDoCliente(nome);
+                
+                this.socket = this.cliente.clienteConectar();
+                
+                listenerSocket = new DatagramSocket();
+                new Thread(new ListenerSocket(this.socket)).start();
+                
+                this.cliente.clienteEnviar(mensagem);
+            } catch (SocketException ex) {
+                Logger.getLogger(TelaChat.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
         else {

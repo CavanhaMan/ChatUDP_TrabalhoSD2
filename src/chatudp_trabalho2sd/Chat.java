@@ -254,7 +254,6 @@ public class Chat extends javax.swing.JFrame   implements ActionListener, KeyLis
     }
     
     public static void main(String args[]) {
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Chat().setVisible(true);

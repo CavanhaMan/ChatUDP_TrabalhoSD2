@@ -2,17 +2,18 @@ package chatudp_service;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+//import java.net.Socket;
 import chatudp_trabalho2sd.Mensagem;
+import java.net.DatagramSocket;
 
 public class ClienteService {
-    private Socket conexao;
+    private DatagramSocket conexao;
     private ObjectOutputStream saida;
     
-    public Socket clienteConectar(){
+    public DatagramSocket clienteConectar(){
         try {
-            this.conexao = new Socket("localhost", 2000);
-            this.saida = new ObjectOutputStream(conexao.getOutputStream());
+            this.conexao = new DatagramSocket(4545);
+            //this.saida = new ObjectOutputStream(conexao.getOutputStream());
         } catch (IOException ex) {
             System.out.println(ex.getMessage() + " Local: ChatUDP_TrabalhoSD2.Service.ClienteService.clienteConectar()");
         }
