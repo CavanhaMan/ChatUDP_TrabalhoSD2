@@ -9,10 +9,10 @@ import java.util.logging.Logger;
 
 public class Cliente extends Thread {
 
-    private final DatagramSocket socket;
+    private final DatagramSocket s;
 
     public Cliente(DatagramSocket socket) {
-        this.socket = socket;
+        this.s = socket;
     }
 
     public static void main(String[] args) {
@@ -61,7 +61,7 @@ public class Cliente extends Thread {
         try {
             while (true) {
                 DatagramPacket resposta = new DatagramPacket(new byte[1024], 1024);
-                socket.receive(resposta);
+                s.receive(resposta);
 
                 System.out.println(new String(resposta.getData()));
             }
